@@ -107,6 +107,7 @@ module Tanker
       query = "#{search_on_fields}:(#{query.to_s}) __type:(#{models.map(&:name).map {|name| "\"#{name.split('::').join(' ')}\"" }.join(' OR ')})"
 
       options = { :start => paginate[:per_page] * (paginate[:page] - 1), :len => paginate[:per_page] }.merge(options) if paginate
+      Rails.logger.debug "INDEXTANK QUERY: #{query}" if defined? Rails and Rails.env.development?
       results = index.search(query, options)
 
       instantiated_results = if (fetch || snippets)
